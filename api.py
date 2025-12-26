@@ -6,8 +6,9 @@ import os
 
 app = FastAPI()
 
-# --- SƏNİN HAZIR LİNKİN ---
-TUNNEL_URL = "https://t4g8rcr2-8000.euw.devtunnels.ms"
+# --- YENİLƏNMİŞ RENDER LİNKİN ---
+# Artıq köhnə Tunnel yox, sənin yeni daimi serverin buradadır:
+TUNNEL_URL = "https://video-api-server-9b5n.onrender.com"
 
 class VideoRequest(BaseModel):
     url: str
@@ -36,13 +37,13 @@ def download_video(request: VideoRequest):
             # Serverə yükləyirik (download=True)
             info = ydl.extract_info(request.url, download=True)
             
-            # Telefona TikTok linkini YOX, bizim serverin linkini veririk
+            # Telefona bu serverin linkini veririk
             local_video_link = f"{TUNNEL_URL}/get_video"
             
             return {
                 "status": "success",
                 "title": info.get('title'),
-                "video_url": local_video_link, # <--- Bu linki telefona göndəririk
+                "video_url": local_video_link, # <--- Telefona gedən yeni link
                 "thumbnail": info.get('thumbnail')
             }
     except Exception as e:
