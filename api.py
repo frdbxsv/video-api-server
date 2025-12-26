@@ -6,8 +6,7 @@ import os
 
 app = FastAPI()
 
-# --- YENİLƏNMİŞ RENDER LİNKİN ---
-# Artıq köhnə Tunnel yox, sənin yeni daimi serverin buradadır:
+# --- SƏNİN RENDER LİNKİN ---
 TUNNEL_URL = "https://video-api-server-9b5n.onrender.com"
 
 class VideoRequest(BaseModel):
@@ -25,6 +24,7 @@ def download_video(request: VideoRequest):
     if os.path.exists(output_filename):
         os.remove(output_filename)
 
+    # Bu, YouTube-un ən yaxşı işlədiyi sadə ayarlardır
     ydl_opts = {
         'format': 'best',
         'outtmpl': output_filename, # Faylın adı
@@ -37,14 +37,14 @@ def download_video(request: VideoRequest):
             # Serverə yükləyirik (download=True)
             info = ydl.extract_info(request.url, download=True)
             
-            # Telefona bu serverin linkini veririk
+            # Telefona gedən link
             local_video_link = f"{TUNNEL_URL}/get_video"
             
             return {
                 "status": "success",
-                "title": info.get('title'),
-                "video_url": local_video_link, # <--- Telefona gedən yeni link
-                "thumbnail": info.get('thumbnail')
+                "title": info.get('title', 'Video'),
+                "video_url": local_video_link, 
+                "thumbnail": info.get('thumbnail', '')
             }
     except Exception as e:
         print(f"Xəta: {e}")
